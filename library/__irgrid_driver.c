@@ -88,12 +88,6 @@ static void _set_trim();
 static void _calc_ta();
 static void _calc_to();
 
-static double _floor(double x);
-static static double _eval_poly(double x, const double code * d, int n);
-static double _sqrt(double x);
-static double _exp(double x);
-static double _log(double x);
-static double __pow(double x, double y);
 static void _memcpy(char * d1, char * s1, int n);
 
 /* --------------------------------------------- PRIVATE FUNCTION DEFINITIONS */
@@ -106,226 +100,6 @@ static void _memcpy(char * d1, char * s1, int n) {
   while(n--)
     *dd++ = *ss++;
 }
-
-#if defined  __MIKROC_PRO_FOR_PIC__
-
-#define __pow(x,y)  _pow(x,y)
-#define _sqrt(x) sqrt(x)
-#define _log(x)  log(x)
-#define _exp(x)  exp(x)
-
-#else
-
-#define DBL_MAX       3.40282347e+38
-#define DBL_MANT_DIG  23
-#define EXCESS        126
-#define MAX_EXPONENT  255
-#define _FRNDINT(x)   ((double)(long)(x))
-#define CHAR_BIT      8
-#define EXP_MAX       89.416
-#define EXP_MIN      -87.33655
-
-static union both
-{
-        struct flt
-        {
-                unsigned char   mant[2];
-                unsigned        hmant:7;
-                unsigned        exp:8;
-                unsigned        sign:1;
-
-        }        flt;
-        double        fl;
-};
-
-//--------------
-static double _frexp(double value, int * eptr) {
-  union both uv;
-  volatile int bb;
-
-  uv.fl = value;
-  bb = uv.flt.exp - EXCESS;
-  *eptr = bb;
-  uv.flt.exp = EXCESS;
- return uv.fl;
-}
-
-//--------------
-static double _ldexp(double value, int newexp) {
-   union both uv;
-
-  uv.fl = value;
-  newexp += uv.flt.exp;
-  if (newexp < 0)
-    return 0.0;
-  else
-    if (newexp > MAX_EXPONENT)
-      if (value < 0.0)
-        return -DBL_MAX;
-      else
-        return DBL_MAX;
-    else
-      uv.flt.exp = newexp;
-  return uv.fl;
-
-}
-
-
-
-//-------------- Returns number rounded DOWN to the nearest integer
-static double _floor(double x) {
-  double    i;
-  int       expon;
-
-  expon = ((*(unsigned long *)&x >> 23) & 255);
-  expon = expon- 127;
-  if(expon < 0)
-    if (x < 0.0)
-      return -1.0;
-    else
-      return  0.0;
-  if((unsigned)expon > sizeof(double) * CHAR_BIT - 8)
-    return x;           /* already an integer */
-  i = _FRNDINT(x);
-
-  if(i > x)
-    return i - 1.0;
-  return i;
-}
-
-//-------------- Calculates polynom for number x, with coefficients stored in d[], for degree n
-static static double _eval_poly(double x, const double code * d, int n) {
-  double res;
-
-  res = d[n];
-  while(n)
-    res = x * res + d[--n];
-
-  return res;
-}
-
-
-//-------------- Returns square root of given number
-static double _sqrt(double x) {
-  double    og, ng;
-  unsigned int     niter;
-  int       expon;
-
-  if(x <= 0.0)
-    return 0.0;
-  og = x;
-  if(og < 1.0)
-    og = 1.0/og;
-  og = _frexp(og, &expon);
-  og = _ldexp(og, expon/2);                // make an educated guess //
-  if(x < 1.0)
-    og = 1.0/og;
-  niter = 20;
-  do {
-    ng = (x/og + og)/2.0;
-    if(ng == og)
-              break;
-    og = ng;
-  } while(--niter);
-
-  return og;
-}
-
-//-------------- Returns number e raised to the _power of argument x
-static double _exp(double x) {
-  int       exp;
-  char     sign;                                // Promenjeno unsigned int u
-                                                                  // unsigned char (optimizacija)  MZ 11.08.2008.
-
-  const static double coeff[] = {
-    1.0000000000e+00,
-    6.9314718056e-01,
-    2.4022650695e-01,
-    5.5504108945e-02,
-    9.6181261779e-03,
-    1.3333710529e-03,
-    1.5399104432e-04,
-    1.5327675257e-05,
-    1.2485143336e-06,
-    1.3908092221e-07,
-  };
-
-  if(x == 0.0)
-    return 1.0;
-  if (x > EXP_MAX)    //too big?
-    return DBL_MAX;
-  if (x < EXP_MIN)    //too small?
-    return 0.0;
-  sign = x < 0.0;
-  if(sign)
-    x = -x;
-  x *= 1.4426950409;            // convert to log2 //
-  exp = (int)_floor(x);
-  x -= (double)exp;
-  x = _ldexp(_eval_poly(x, coeff, sizeof coeff/sizeof coeff[0] - 1), exp);
-  if(sign) {
-    if (x == DBL_MAX)
-      return 0.0;
-    return 1.0/x;
-  }
-  return x;
-}
-
-
-//-------------- Returns natural logarithm of given argument - ln(x)
-static double _log(double x) {
-  int       exp;
-  static const double coeff[] = {
-     0.0000000001,      // a0 //
-     0.9999964239,      // a1 //
-    -0.4998741238,      // a2 //
-     0.3317990258,      // a3 //
-    -0.2407338084,      // a4 //
-     0.1676540711,      // a5 //
-    -0.0953293897,      // a6 //
-     0.0360884937,      // a7 //
-    -0.0064535442,      // a8 //
-  };
-
-  // zero or -ve arguments are not defined //
-
-  if(x <= 0.0)
-            return 0.0;
-  x = _frexp(x, &exp) * 2.0 - 1.0;
-  exp--;
-  x = _eval_poly(x, coeff, sizeof coeff/sizeof coeff[0] - 1);
-  return x + 0.69314718055995 * exp;
-  //return x +   0.68768932874451 * exp;
-}
-
-//-------------- Returns argument x raised to _power of argument y
-static double __pow(double x, double y) {
-  unsigned char sign = 0;       
-                               
-  long yi;
-
-  if(y == 0.0)
-    return 1.0;
-  if(x == 0.0)
-    return 0.0;
-  if(x < 0.0) {
-    yi = (long)y;
-    if((double)yi != y)
-      return 0.0;
-    sign = yi & 1;
-    x = -x;
-  }
-  x = _log(x);
-  x = x*y;
-  x = _exp(x);
-
-  if(sign)
-    return -x;
-  return x;
-}
-#endif
-
-/* --------------------------------------------- C_Math and C_String */
 
 static void _get_eeprom() 
 {
@@ -491,7 +265,7 @@ static void _calc_ta()
     {
         v_th -= 65536.0;
     }
-    v_th = v_th / __pow(2, (3 - resolution));
+    v_th = v_th / pow(2, (3 - resolution));
     k_t1 = (float) 256 * _eeprom_data[_IRGRID_KT1_H] + _eeprom_data[_IRGRID_KT1_L];
     
     if (k_t1 >= 32768.0)
@@ -499,7 +273,7 @@ static void _calc_ta()
         k_t1 -= 65536.0;
     }
 
-    k_t1 /= (__pow(2, k_t1_scale) * __pow(2, (3 - resolution)));
+    k_t1 /= (pow(2, k_t1_scale) * pow(2, (3 - resolution)));
     k_t2 = (float) 256 * _eeprom_data[_IRGRID_KT2_H] + _eeprom_data[_IRGRID_KT2_L];
     
     if (k_t2 >= 32768.0)
@@ -507,9 +281,9 @@ static void _calc_ta()
         k_t2 -= 65536.0;
     }
 
-    k_t2 /= (__pow(2, k_t2_scale) * __pow(2, (3 - resolution)));
+    k_t2 /= (pow(2, k_t2_scale) * pow(2, (3 - resolution)));
     
-    _temperature_amb = ((-k_t1 + _sqrt(__pow(k_t1, 2) - (4 * k_t2 * (v_th - (float) ptat)))) / (2 * k_t2)) + 25.0;
+    _temperature_amb = ((-k_t1 + sqrt(pow(k_t1, 2) - (4 * k_t2 * (v_th - (float) ptat)))) / (2 * k_t2)) + 25.0;
 }
 
 static void _calc_to() 
@@ -525,21 +299,21 @@ static void _calc_to()
     emissivity = (256 * _eeprom_data[_IRGRID_CAL_EMIS_H] + _eeprom_data[_IRGRID_CAL_EMIS_L]) / 32768.0;
     a_common = (int16_t) 256 * _eeprom_data[_IRGRID_CAL_ACOMMON_H] + _eeprom_data[_IRGRID_CAL_ACOMMON_L];
     
-    alpha_cp = (256 * _eeprom_data[_IRGRID_CAL_ALPHA_CP_H] + _eeprom_data[_IRGRID_CAL_ALPHA_CP_L]) / (__pow(2, _eeprom_data[_IRGRID_CAL_A0_SCALE]) * __pow(2, (3 - resolution)));
+    alpha_cp = (256 * _eeprom_data[_IRGRID_CAL_ALPHA_CP_H] + _eeprom_data[_IRGRID_CAL_ALPHA_CP_L]) / (pow(2, _eeprom_data[_IRGRID_CAL_A0_SCALE]) * pow(2, (3 - resolution)));
     a_i_scale = (int16_t) (_eeprom_data[_IRGRID_CAL_AI_SCALE] & 0xF0) >> 4;
     b_i_scale = (int16_t) _eeprom_data[_IRGRID_CAL_BI_SCALE] & 0x0F;
     
     a_cp = (float) 256 * _eeprom_data[_IRGRID_CAL_ACP_H] + _eeprom_data[_IRGRID_CAL_ACP_L];
-    a_cp /= __pow(2, (3 - resolution));
+    a_cp /= pow(2, (3 - resolution));
     b_cp = (float) _eeprom_data[_IRGRID_CAL_BCP];
-    b_cp /= (__pow(2, b_i_scale) * __pow(2, (3 - resolution)));
+    b_cp /= (pow(2, b_i_scale) * pow(2, (3 - resolution)));
     tgc = (float) _eeprom_data[_IRGRID_CAL_TGC];
     tgc /= 32.0;
     vcp_offset_compensated = (float) cpix - (a_cp + b_cp * (_temperature_amb - 25.0));
     
     for (i = 0; i < 64; i++)
     {
-        _a_data[i] = ((float) a_common + _eeprom_data[i] * __pow(2, a_i_scale)) / __pow(2, (3 - resolution));
+        _a_data[i] = ((float) a_common + _eeprom_data[i] * pow(2, a_i_scale)) / pow(2, (3 - resolution));
         _b_data[i] = _eeprom_data[0x40 + i];
 
         if (_b_data[i] > 127)
@@ -547,17 +321,17 @@ static void _calc_to()
             _b_data[i] -= 256;
         }
 
-        _b_data[i] = _b_data[i] / (__pow(2, b_i_scale) * __pow(2, (3 - resolution)));
+        _b_data[i] = _b_data[i] / (pow(2, b_i_scale) * pow(2, (3 - resolution)));
         vir_offset_compensated = _ir_data[i] - (_a_data[i] + _b_data[i] * (_temperature_amb - 25.0));
         vir_tgc_compensated = vir_offset_compensated - tgc * vcp_offset_compensated;
-        _alpha_a_data[i] = ((256 * _eeprom_data[_IRGRID_CAL_A0_H] + _eeprom_data[_IRGRID_CAL_A0_L]) / __pow(2, _eeprom_data[_IRGRID_CAL_A0_SCALE]));
-        _alpha_a_data[i] += (_eeprom_data[0x80 + i] / __pow(2, _eeprom_data[_IRGRID_CAL_DELTA_A_SCALE]));
-        _alpha_a_data[i] = _alpha_a_data[i] / __pow(2, 3 - resolution);
+        _alpha_a_data[i] = ((256 * _eeprom_data[_IRGRID_CAL_A0_H] + _eeprom_data[_IRGRID_CAL_A0_L]) / pow(2, _eeprom_data[_IRGRID_CAL_A0_SCALE]));
+        _alpha_a_data[i] += (_eeprom_data[0x80 + i] / pow(2, _eeprom_data[_IRGRID_CAL_DELTA_A_SCALE]));
+        _alpha_a_data[i] = _alpha_a_data[i] / pow(2, 3 - resolution);
         vir_normal = vir_tgc_compensated / (_alpha_a_data[i] - tgc * alpha_cp);
         vir_compensated = vir_normal / emissivity;
         
         // Compensated compared to original formula ... 
-        _temperature_data[i] = 329.5 - (_exp((_log((vir_compensated + __pow((_temperature_amb + 273.15), 4)))/4.0)));
+        _temperature_data[i] = 329.5 - (exp((log((vir_compensated + pow((_temperature_amb + 273.15), 4)))/4.0)));
     }
 }
 
@@ -677,10 +451,6 @@ void irgrid_get_temperature(float *buffer)
 {
     _memcpy(buffer, _temperature_data, sizeof(float) * 64);
 }
-
-
-
-
 
 /* -------------------------------------------------------------------------- */
 /*
