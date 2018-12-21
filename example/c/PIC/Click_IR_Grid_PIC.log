@@ -1,0 +1,47 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP18F87K22 -RA -DL -O11111114 -fo64 -N"C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC\Click_IR_Grid_PIC.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC\" -SP"C:\Users\katarina.perendic\Desktop\IR Grid\library\HAL\" -SP"C:\Users\katarina.perendic\Desktop\IR Grid\library\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\mikroBUS Board Definition API\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -IP"C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC\" -IP"C:\Users\katarina.perendic\Desktop\IR Grid\library\" -IP"C:\Users\katarina.perendic\Desktop\IR Grid\library\HAL\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\mikroBUS Board Definition API\Uses\" "Click_IR_Grid_PIC.c" "__irgrid_driver.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_CMath.mcl" "__Lib_Conversions.mcl" "__Lib_I2C_c34d65_k22_k90.mcl" "__Lib_UART_c67g12.mcl" "easypicpro_v7_P18F87K22.mcl" "Click_IR_Grid.pld"	 
+hint: 0	1139	Available RAM: 3841 [bytes], Available ROM: 131072 [bytes]	 
+diagnostics: 0	122	Compilation Started	P18F87K22.c
+diagnostics: 3486	123	Compiled Successfully	P18F87K22.c
+diagnostics: 0	122	Compilation Started	__Lib_Delays.c
+diagnostics: 172	123	Compiled Successfully	__Lib_Delays.c
+diagnostics: 0	122	Compilation Started	stdint.h
+warning: 17	1509	Generated baud rate is 4808 bps (error = 0.17 percent)	__epp_18f87k22_log.c
+warning: 18	1509	Generated baud rate is 9615 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 19	1509	Generated baud rate is 19231 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 20	1509	Generated baud rate is 38462 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 21	1509	Generated baud rate is 57971 bps (error = 0.64 percent)	__epp_18f87k22_log.c
+warning: 22	1509	Generated baud rate is 114286 bps (error = 0.79 percent)	__epp_18f87k22_log.c
+warning: 33	1509	Generated baud rate is 4808 bps (error = 0.17 percent)	__epp_18f87k22_log.c
+warning: 34	1509	Generated baud rate is 9615 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 35	1509	Generated baud rate is 19231 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 36	1509	Generated baud rate is 38462 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 37	1509	Generated baud rate is 57971 bps (error = 0.64 percent)	__epp_18f87k22_log.c
+warning: 38	1509	Generated baud rate is 114286 bps (error = 0.79 percent)	__epp_18f87k22_log.c
+warning: 65	1509	Generated baud rate is 4808 bps (error = 0.17 percent)	__epp_18f87k22_log.c
+warning: 66	1509	Generated baud rate is 9615 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 67	1509	Generated baud rate is 19231 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 68	1509	Generated baud rate is 38462 bps (error = 0.16 percent)	__epp_18f87k22_log.c
+warning: 69	1509	Generated baud rate is 57971 bps (error = 0.64 percent)	__epp_18f87k22_log.c
+warning: 70	1509	Generated baud rate is 114286 bps (error = 0.79 percent)	__epp_18f87k22_log.c
+diagnostics: 349	123	Compiled Successfully	easypicpro_v7_P18F87K22.c
+diagnostics: 0	122	Compilation Started	stdint.h
+error: 40	324	Undeclared identifier 'irgrid_i2cDriverInit' in expression	Click_IR_Grid_PIC.c
+error: 40	317	Operator '' is not applicable to these operands ''	Click_IR_Grid_PIC.c
+error: 40	402	; expected, but ')' found	Click_IR_Grid_PIC.c
+error: 40	424	'}' expected ';' found	Click_IR_Grid_PIC.c
+error: 54	324	Undeclared identifier 'irgrid_measure' in expression	Click_IR_Grid_PIC.c
+error: 54	317	Operator '' is not applicable to these operands ''	Click_IR_Grid_PIC.c
+error: 56	324	Undeclared identifier 'irgrid_get_temperature' in expression	Click_IR_Grid_PIC.c
+diagnostics: 0	122	Compilation Started	stdint.h
+warning: 673	1505	Suspicious pointer conversion	__irgrid_driver.c
+warning: 673	1505	Suspicious pointer conversion	__irgrid_driver.c
+warning: 678	1505	Suspicious pointer conversion	__irgrid_driver.c
+warning: 678	1505	Suspicious pointer conversion	__irgrid_driver.c
+diagnostics: 679	123	Compiled Successfully	__irgrid_driver.c
+hint: 323	1164	Variable 'tmp' has been eliminated by optimizer	__irgrid_driver.c
+hint: 95	1164	Variable 'tmp' has been eliminated by optimizer	__irgrid_driver.c
+hint: 345	1164	Variable 'Hz_MSB' has been eliminated by optimizer	__irgrid_driver.c
+hint: 469	1164	Variable 'config' has been eliminated by optimizer	__irgrid_driver.c
+hint: 520	1164	Variable 'vir_offset_compensated' has been eliminated by optimizer	__irgrid_driver.c
+hint: 522	1164	Variable 'vir_normal' has been eliminated by optimizer	__irgrid_driver.c
+error: 0	102	Finished (with errors): 03 jul 2018, 15:46:37	Click_IR_Grid_PIC.mcppi

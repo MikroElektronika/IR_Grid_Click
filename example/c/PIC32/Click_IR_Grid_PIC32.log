@@ -1,0 +1,20 @@
+0	1	mikroCPIC32.exe -MSF -DBG -pP32MX795F512L -C -DL -SSA -EBASE 0x9FC01000 -INTDEF MV_SRS7_IS32 -O11111115 -fo80 -N"C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC32\Click_IR_Grid_PIC32.mcp32" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -SP"C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC32\" -SP"C:\Users\katarina.perendic\Desktop\IR Grid\library\HAL\" -SP"C:\Users\katarina.perendic\Desktop\IR Grid\library\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\mikroBUS Board Definition API\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Uses\" -IP"C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC32\" -IP"C:\Users\katarina.perendic\Desktop\IR Grid\library\" -IP"C:\Users\katarina.perendic\Desktop\IR Grid\library\HAL\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\mikroBUS Board Definition API\Uses\" "Click_IR_Grid_PIC32.c" "__irgrid_Driver.c" "__Lib_CP0.emcl" "__Lib_Math.emcl" "__Lib_MathDouble.emcl" "__Lib_System.emcl" "__Lib_SoftResetDma.emcl" "__Lib_Delays.emcl" "__Lib_CString.emcl" "__Lib_Conversions.emcl" "__Lib_I2C_12345.emcl" "__Lib_UART_123456.emcl" "easypicfusion_v7_P32MX795F512L.emcl" "Click_IR_Grid.pld"	 
+hint: 14	1354	 warning: "/*" within comment     /*   IC32 Compiler ver : v4.0.0.0  sion v7	C:\Users\katarina.perendic\Desktop\IR Grid\example\c\PIC32\Click_IR_Grid_PIC32.c
+diagnostics: 0	122	Compilation Started	stdint.h
+diagnostics: 102	123	Compiled Successfully	Click_IR_Grid_PIC32.c
+hint: 64	1164	Variable 'i' has been eliminated by optimizer	Click_IR_Grid_PIC32.c
+diagnostics: 0	122	Compilation Started	stdint.h
+diagnostics: 708	123	Compiled Successfully	__irgrid_Driver.c
+hint: 323	1164	Variable 'tmp' has been eliminated by optimizer	__irgrid_Driver.c
+hint: 95	1164	Variable 'tmp' has been eliminated by optimizer	__irgrid_Driver.c
+hint: 498	1164	Variable 'config' has been eliminated by optimizer	__irgrid_Driver.c
+hint: 551	1164	Variable 'vir_normal' has been eliminated by optimizer	__irgrid_Driver.c
+diagnostics: 0	127	All files Compiled in 109 ms	 
+hint: 0	1144	Used RX: 32 (100%)   Free RX: 0 (0%)	Used RX: 32 (100%)   Free RX: 0 (0%)
+hint: 0	1144	Static RAM (bytes): 1958   Dynamic RAM (bytes): 129109	Static RAM (bytes): 1958   Dynamic RAM (bytes): 129109
+hint: 0	1144	Used ROM (bytes): 21575 (4%)  Free ROM (bytes): 502713 (96%)	Used ROM (bytes): 21575 (4%)  Free ROM (bytes): 502713 (96%)
+hint: 0	1144	Used BOOTROM (bytes): 320 (3%)  Free BOOTROM (bytes): 11953 (97%)	Used BOOTROM (bytes): 320 (3%)  Free BOOTROM (bytes): 11953 (97%)
+diagnostics: 0	125	Project Linked Successfully	Click_IR_Grid_PIC32.mcp32
+diagnostics: 0	128	Linked in 234 ms	 
+diagnostics: 0	129	Project 'Click_IR_Grid_PIC32.mcp32' completed: 468 ms	 
+diagnostics: 0	103	Finished successfully: 03 jul 2018, 15:02:53	Click_IR_Grid_PIC32.mcp32
